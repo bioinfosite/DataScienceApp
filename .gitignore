@@ -1,0 +1,46 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+*.pyo
+*.pyc
+*.pyd
+*.egg-info
+build/
+dist/
+wheels/
+
+# Jupyter/IPython
+.ipynb_checkpoints/
+*.ipynb
+
+# VSCode
+.vscode/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Streamlit
+.streamlit/
+
+# Reports/outputs
+*.html
+*.svg
+
+# CSV/Excel sample data
+*.csv
+*.xlsx
+
+# Logs
+*.log
+
+# Others
+*.tmp
+*.bak
