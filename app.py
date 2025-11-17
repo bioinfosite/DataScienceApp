@@ -8,6 +8,7 @@ from pages import (
     corr_page,
     metrics_page,
     feature_importance_page,
+    eda_checklist_page,
 )
 
 st.set_page_config(layout="wide", page_title="データサイエンス EDA App")
@@ -20,6 +21,7 @@ PAGES = {
     "相関分析": corr_page,
     "誤差指標（回帰）": metrics_page,
     "Feature Importance（特徴量重要度）": feature_importance_page,
+    "EDAチェックリスト": eda_checklist_page,
 }
 
 page = st.sidebar.selectbox("ページを選択してください", list(PAGES.keys()))
