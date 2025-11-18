@@ -6,27 +6,38 @@ def run():
     st.title("🧪 Mito Data Editor")
 
     uploaded_files = st.file_uploader(
-        "CSVまたはExcelをアップロード",
+        "CSVまたはExcelファイルをアップロードしてください",
         type=["csv", "xlsx"],
-        accept_multiple_files=True
+        accept_multiple_files=True,
     )
 
     if not uploaded_files:
-        st.info("ファイルをアップロードしてください")
-        return
+        st.info("まず CSV または Excel ファイルをアップロードしてください。")
+        st.stop()
 
     dfs = {}
     df_names = []
 
-    for uploaded in uploaded_files:
-        if uploaded.name.endswith(".csv"):
-            df = pd.read_csv(uploaded)
-        else:
-            df = pd.read_excel(uploaded)
-
-        key = uploaded.name
-        dfs[key] = df
-        df_names.append(key)
+    try:
+        for uploaded in uploaded_files:
+            fname = uploaded.name
+            if fname.endswith(".csv"):
+                dfs[fname] = pd.read_csv(uploaded)
+                df_names.append(fname.replace(".csv", ""))
+            else:
+                xls = pd.ExcelFile(uploaded)
+                sheets = st.multiselect(
+                    f"Select sheets from {fname}",
+                    xls.sheet_names,
+                    default=xls.sheet_names,
+                )
+                for sheet in sheets:
+                    key = f"{sheet}"
+                    dfs[key] = pd.read_excel(uploaded, sheet_name=sheet)
+                    df_names.append(key)
+    except Exception as e:
+        st.error(f"ファイルの読み込みに失敗しました: {e}")
+        st.stop()
 
     new_dfs, code = spreadsheet(*dfs.values(), df_names=df_names)
 

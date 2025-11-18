@@ -60,4 +60,4 @@ def run():
     # Plot
     st.subheader("📊 可視化（Feature Importance）")
     fig = px.bar(imp_df, x="Importance", y="Feature", orientation="h")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")

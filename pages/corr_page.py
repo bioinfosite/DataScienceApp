@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
+
 
 def run():
     st.title("📈 相関分析（Correlation）")
@@ -11,14 +11,18 @@ def run():
         "相関分析用の CSV/Excel をアップロード",
         type=["csv", "xlsx"],
         accept_multiple_files=False,
-        key="corr_uploader"
+        key="corr_uploader",
     )
 
     if not uploaded:
         st.info("ファイルをアップロードしてください")
         return
 
-    df = pd.read_csv(uploaded) if uploaded.name.endswith(".csv") else pd.read_excel(uploaded)
+    df = (
+        pd.read_csv(uploaded)
+        if uploaded.name.endswith(".csv")
+        else pd.read_excel(uploaded)
+    )
 
     st.subheader("📄 データPreview")
     st.dataframe(df.head())
@@ -35,13 +39,7 @@ def run():
     st.subheader(f"🔢 {method.upper()} 相関係数行列")
     st.dataframe(corr)
 
-    # Seaborn heatmap
-    st.subheader("🔥 相関ヒートマップ（Seaborn）")
-    fig, ax = plt.subplots(figsize=(10, 7))
-    sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f", ax=ax)
-    st.pyplot(fig)
-
     # Plotly heatmap
     st.subheader("📊 相関ヒートmap（Plotly）")
     fig2 = px.imshow(corr, text_auto=True, color_continuous_scale="RdBu_r")
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, width="stretch")

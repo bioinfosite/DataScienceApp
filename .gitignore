@@ -28,7 +28,7 @@ Thumbs.db
 *.swo
 
 # Streamlit
-.streamlit/
+# .streamlit/
 
 # Reports/outputs
 *.html

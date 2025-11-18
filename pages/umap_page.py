@@ -55,4 +55,4 @@ def run():
     })
 
     fig = px.scatter(df_plot, x="UMAP1", y="UMAP2")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, =True)
