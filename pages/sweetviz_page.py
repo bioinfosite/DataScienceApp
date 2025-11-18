@@ -16,5 +16,5 @@ def run():
     report = sv.analyze(df)
     report.show_html("sweetviz_report.html")
 
-    with open("sweetviz_report.html") as f:
-        components.html(f.read(), height=900, scrolling=True)
+    # with open("sweetviz_report.html") as f:
+    #     components.html(f.read(), height=900, scrolling=True)
