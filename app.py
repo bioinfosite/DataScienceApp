@@ -9,6 +9,8 @@ from pages import (
     metrics_page,
     feature_importance_page,
     eda_checklist_page,
+    mutual_information,
+    lgb_shap
 )
 
 st.set_page_config(layout="wide", page_title="データサイエンス EDA App")
@@ -22,6 +24,8 @@ PAGES = {
     "誤差指標（回帰）": metrics_page,
     "Feature Importance（特徴量重要度）": feature_importance_page,
     "EDAチェックリスト": eda_checklist_page,
+    "相互情報量": mutual_information,
+    "SHAP 解析（LightGBM）": lgb_shap
 }
 
 page = st.sidebar.selectbox("ページを選択してください", list(PAGES.keys()))

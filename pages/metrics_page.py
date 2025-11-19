@@ -36,13 +36,25 @@ def run():
     y = df[y_col]
     y_pred = df[y_pred_col]
 
+    # NaN除外処理（両方のNaNをまとめて除外）
+    valid_df = pd.DataFrame({"y": y, "y_pred": y_pred}).dropna().reset_index(drop=True)
+    if len(valid_df) < len(df):
+        st.warning(
+            f"y, y_predにNaNが含まれているため {len(valid_df)} 件のみ計算に使用します。NaN行は除外されます。"
+        )
+    y_valid = valid_df["y"].astype(float)
+    y_pred_valid = valid_df["y_pred"].astype(float)
+    if y_valid.isna().sum() > 0 or y_pred_valid.isna().sum() > 0:
+        st.error("NaNが残っています。データを確認してください。")
+        return
+
     st.subheader("📊 計算結果")
 
-    mae = mean_absolute_error(y, y_pred)
-    mape = mean_absolute_percentage_error(y, y_pred)
-    mse = mean_squared_error(y, y_pred)
+    mae = mean_absolute_error(y_valid, y_pred_valid)
+    mape = mean_absolute_percentage_error(y_valid, y_pred_valid)
+    mse = mean_squared_error(y_valid, y_pred_valid)
     rmse = mse**0.5
-    r2 = r2_score(y, y_pred)
+    r2 = r2_score(y_valid, y_pred_valid)
 
     # 追加指標
     from sklearn.metrics import (
@@ -51,25 +63,27 @@ def run():
         max_error,
     )
 
-    medae = median_absolute_error(y, y_pred)
-    explained_var = explained_variance_score(y, y_pred)
-    maxerr = max_error(y, y_pred)
+    medae = median_absolute_error(y_valid, y_pred_valid)
+    explained_var = explained_variance_score(y_valid, y_pred_valid)
+    maxerr = max_error(y_valid, y_pred_valid)
     # Adjusted R2（自由度調整済み決定係数）
-    n = len(y)
+    n = len(y_valid)
     p = 1  # 単回帰の場合。多変量の場合は特徴量数に変更
     adj_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1) if n > p + 1 else None
 
     # ピアソン・スピアマン相関係数
-    pearson_corr = y.corr(y_pred, method="pearson")
-    spearman_corr = y.corr(y_pred, method="spearman")
+    pearson_corr = y_valid.corr(y_pred_valid, method="pearson")
+    spearman_corr = y_valid.corr(y_pred_valid, method="spearman")
 
     # SMAPE（対称平均絶対パーセント誤差）
-    smape = (100 * (abs(y - y_pred) / ((abs(y) + abs(y_pred)) / 2))).mean()
+    smape = (
+        100 * (abs(y_valid - y_pred_valid) / ((abs(y_valid) + abs(y_pred_valid)) / 2))
+    ).mean()
 
     # RMSLE（二乗平均平方対数誤差）
     import numpy as np
 
-    rmsle = np.sqrt(mean_squared_error(np.log1p(y), np.log1p(y_pred)))
+    rmsle = np.sqrt(mean_squared_error(np.log1p(y_valid), np.log1p(y_pred_valid)))
 
     # 指標を辞書でまとめる
     metrics_dict = {
