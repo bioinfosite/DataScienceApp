@@ -4,6 +4,7 @@ from sklearn.preprocessing import StandardScaler
 import umap.umap_ as umap
 import plotly.express as px
 
+
 def run():
     st.title("🌈 UMAP 次元削減")
 
@@ -11,7 +12,7 @@ def run():
         "UMAP用の CSV または Excel をアップロード",
         type=["csv", "xlsx"],
         accept_multiple_files=False,
-        key="umap_uploader"
+        key="umap_uploader",
     )
 
     if not uploaded:
@@ -19,7 +20,11 @@ def run():
         return
 
     # データ読み込み
-    df = pd.read_csv(uploaded) if uploaded.name.endswith(".csv") else pd.read_excel(uploaded)
+    df = (
+        pd.read_csv(uploaded)
+        if uploaded.name.endswith(".csv")
+        else pd.read_excel(uploaded)
+    )
 
     st.subheader("📄 データPreview")
     st.dataframe(df.head())
@@ -38,10 +43,7 @@ def run():
     min_dist = st.slider("min_dist", 0.0, 1.0, value=0.1)
 
     reducer = umap.UMAP(
-        n_neighbors=n_neighbors,
-        min_dist=min_dist,
-        n_components=2,
-        random_state=42
+        n_neighbors=n_neighbors, min_dist=min_dist, n_components=2, random_state=42
     )
 
     embedding = reducer.fit_transform(scaled)
@@ -49,10 +51,12 @@ def run():
     # 2D Plot
     st.subheader("🌈 UMAP 2D プロット")
 
-    df_plot = pd.DataFrame({
-        "UMAP1": embedding[:, 0],
-        "UMAP2": embedding[:, 1],
-    })
+    df_plot = pd.DataFrame(
+        {
+            "UMAP1": embedding[:, 0],
+            "UMAP2": embedding[:, 1],
+        }
+    )
 
     fig = px.scatter(df_plot, x="UMAP1", y="UMAP2")
-    st.plotly_chart(fig, =True)
+    st.plotly_chart(fig, width="stretch")
