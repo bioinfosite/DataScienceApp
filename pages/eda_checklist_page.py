@@ -211,3 +211,5 @@ def run():
     #         file_name="eda_checklist.pdf",
     #         mime="application/pdf",
     #     )
+
+run()
