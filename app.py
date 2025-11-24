@@ -23,15 +23,14 @@ st.markdown("""
 
 このアプリは以下の分析ステップをサポートします：
 
-- 📁 データアップロード  
-- 🔍 探索的データ分析（EDA）  
-- 📉 PCA / UMAP  
-- 📊 相関可視化（Heatmap, Scatter）  
-- 🧮 Metrics（MAPE, RMSE 等）  
-- 🔬 Feature Importance  
-- 📉 クラスタリング（KMeans / HDBSCAN）  
-- 📝 ydata-profiling による自動レポート  
-- 🧩 MitoSheet によるデータ加工 GUI  
+- 📁 mito_analysis(mitosheet) データ分析・加工・可視化  
+- 🔍 プロファイリング(sweetviz)  
+- 📊 相関分析
+- 📉 次元削減(PCA, TSNE, UMAP)  
+- 🔬 SHAP分析  
+- 🧮 指標計算  
+- 📝 特徴量エンジニアリング  
+            
 """)
 
 
