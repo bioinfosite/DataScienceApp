@@ -96,3 +96,11 @@ http://localhost:8501
 ```bash
 uv run streamlit run app.py --server.port 8510
 ```
+
+## License Notice
+
+This application uses Mito (https://github.com/mito-ds/mito),
+which is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
+
+Under the terms of the AGPL, anyone interacting with this application
+via a network is entitled to request the source code of the application.

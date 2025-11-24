@@ -28,13 +28,35 @@ memo_sidebar()
 # ==========================================================
 # ユーティリティ：ペースト入力 → ベクトルへ
 # ==========================================================
-def parse_text_to_series(text):
-    try:
-        values = [float(v) for v in text.replace(",", " ").split()]
-        return pd.Series(values, dtype=float)
-    except:
+def parse_text_to_series(text: str) -> pd.Series | None:
+    """
+    Excel / MitoSheet から 1 列コピーされたデータを Series に変換する。
+    - 改行区切り
+    - カンマ付き数値 ("2,739.00") も自動で変換
+    - 空行・空白行は無視
+    """
+    if not text.strip():
         return None
 
+    rows = text.strip().split("\n")
+
+    cleaned = []
+    for r in rows:
+        r = r.strip()
+        if r == "":
+            continue
+        
+        # "2,739.00" → "2739.00"
+        r = r.replace(",", "")
+
+        cleaned.append(r)
+
+    # 数値に変換
+    try:
+        series = pd.to_numeric(cleaned, errors="coerce")
+        return pd.Series(series)
+    except Exception:
+        return None
 
 # ==========================================================
 # 指標計算関数群
@@ -126,12 +148,24 @@ if method == "ペースト入力":
     col1, col2 = st.columns(2)
 
     with col1:
-        text_a = st.text_area("ベクトル A（例: 1 2 3 4 ）")
+        text_a = st.text_area(
+            "ベクトル A（1列だけをコピーして貼り付け）",
+            height=200,
+            placeholder="例:\n16.00\n19.00\n11.00\n..."
+        )
     with col2:
-        text_b = st.text_area("ベクトル B（例: 1 1 2 3 ）")
+        text_b = st.text_area(
+            "ベクトル B（1列だけをコピーして貼り付け）",
+            height=200,
+            placeholder="例:\n2739.00\n2672.00\n3159.00\n..."
+        )
 
-    a = parse_text_to_series(text_a) if text_a else None
-    b = parse_text_to_series(text_b) if text_b else None
+    # text_area の内容は空文字でも必ず来るので、ここでパースする
+    a = parse_text_to_series(text_a) if text_a.strip() != "" else None
+    b = parse_text_to_series(text_b) if text_b.strip() != "" else None
+
+    # st.write("DEBUG A:", a)
+    # st.write("DEBUG B:", b)
 
 else:
     uploaded = st.file_uploader("CSV / Excel アップロード", ["csv", "xlsx"])

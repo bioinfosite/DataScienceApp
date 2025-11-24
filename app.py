@@ -23,7 +23,6 @@ st.markdown("""
 
 このアプリは以下の分析ステップをサポートします：
 
-- 📁 mito_analysis(mitosheet) データ分析・加工・可視化  
 - 🔍 プロファイリング(sweetviz)  
 - 📊 相関分析
 - 📉 次元削減(PCA, TSNE, UMAP)  

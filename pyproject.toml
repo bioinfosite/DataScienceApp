@@ -1,20 +1,20 @@
 [project]
-name = "mito-sweetviz-env"
+name = "DataScienceApp"
 version = "0.1.0"
 requires-python = "==3.10.12"
 
 dependencies = [
     "numpy<2.0",
-    "pandas<2.2",
-    "mitosheet", # ← バージョン固定しない
-    "sweetviz==2.3.1", # ← Mito と100%共存
+    "pandas<2.2", #
+    "sweetviz==2.3.1",
     "matplotlib<3.9",
     "scipy<1.12",
     "python-dateutil",
     "streamlit>=1.51.0",
     "scikit-learn>=1.7.2",
     "umap-learn>=0.5.9.post2",
-    "fpdf>=1.7.2",
     "shap>=0.49.1",
     "lightgbm>=4.6.0",
+    "setuptools>=80.9.0",
+    "plotly>=6.5.0",
 ]
