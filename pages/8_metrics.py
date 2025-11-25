@@ -224,6 +224,75 @@ if st.button("🚀 計算する"):
         "text/csv",
     )
 
+# ------------------------------
+# 散布図作成（回帰直線 + y=x）
+# ------------------------------
+st.subheader("📉 散布図（A vs B）")
+
+if st.button("📊 散布図を表示する"):
+
+    import matplotlib.pyplot as plt
+
+    x = a.values.astype(float)
+    y = b.values.astype(float)
+
+    # --- 回帰直線 ---
+    coef = np.polyfit(x, y, 1)  # 1次式フィット
+    slope = coef[0]
+    intercept = coef[1]
+
+    # 回帰予測
+    y_pred_line = slope * x + intercept
+
+    # R2スコア
+    ss_res = np.sum((y - y_pred_line) ** 2)
+    ss_tot = np.sum((y - np.mean(y)) ** 2)
+    r2 = 1 - ss_res / ss_tot if ss_tot > 0 else 0
+
+    # 相関係数
+    corr_coef = np.corrcoef(x, y)[0, 1]
+
+    # --- プロット ---
+    fig, ax = plt.subplots(figsize=(7, 6))
+
+    # 散布図
+    ax.scatter(x, y, alpha=0.7, label="Data Points")
+
+    # y=x 線
+    min_val = min(np.min(x), np.min(y))
+    max_val = max(np.max(x), np.max(y))
+    ax.plot([min_val, max_val], [min_val, max_val], "k--", label="y = x")
+
+    # 回帰直線
+    xx = np.linspace(min_val, max_val, 100)
+    yy = slope * xx + intercept
+    ax.plot(xx, yy, "r-", label=f"Regression Line")
+
+    # グリッド線
+    ax.grid(True, linestyle="--", alpha=0.6)
+
+    # 軸ラベル
+    ax.set_xlabel("Vector A")
+    ax.set_ylabel("Vector B")
+    ax.set_title("Scatter plot with Regression Line and y=x")
+
+    ax.legend()
+
+    st.pyplot(fig)
+
+    # --- 回帰式と R² の表示 ---
+    st.markdown(f"""
+    ### 📘 回帰直線の式
+    **y = {slope:.2f} × x + {intercept:.2f}**
+
+    ### 📊 R²（決定係数）
+    **R² = {r2:.2f}**
+    ### 📈 相関係数
+    **Corr = {corr_coef:.2f}**
+    """)
+
+
+
 with st.expander("📘 使用可能な指標一覧（説明付き）"):
     st.markdown("""
 ## 🟦 Regression Errors（回帰誤差）
